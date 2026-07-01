@@ -1,6 +1,6 @@
-const AssetHistory = require("../models/AssetHistory");
-const Asset = require("../models/Asset");
-const Employee = require("../models/Employee");
+const AssetHistory = require("../models/assetHistory");
+const Asset = require("../models/asset");
+const Employee = require("../models/employee");
 
 
 // Create History Record
