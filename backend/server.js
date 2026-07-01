@@ -22,9 +22,6 @@ if (process.env.NODE_ENV !== "production") {
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/employees", employeeRoutes);
