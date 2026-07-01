@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
 
-const Asset = require("./Asset");
-const Employee = require("./Employee");
+const Asset = require("./asset");
+const Employee = require("./employee");
 
 const AssetHistory = sequelize.define(
   "AssetHistory",
