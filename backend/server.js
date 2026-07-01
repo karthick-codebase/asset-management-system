@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { Employee } = require("./models/employee.js");
-const Category = require("./models/Category");
+const Category = require("./models/category.js");
 const assets = require("./models/asset.js");
 const assetHistories = require("./models/assetHistory.js");
 const categoryRoutes = require("./routes/categoryRoutes.js");
