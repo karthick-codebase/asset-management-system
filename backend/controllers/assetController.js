@@ -1,7 +1,7 @@
-const Asset = require("../models/Asset");
-const Category = require("../models/Category");
-const Employee = require("../models/Employee");
-const AssetHistory = require("../models/AssetHistory");
+const Asset = require("../models/asset");
+const Category = require("../models/category");
+const Employee = require("../models/employee");
+const AssetHistory = require("../models/assetHistory");
 const { Op } = require("sequelize");
 // Create Asset
 exports.createAsset = async (req, res) => {
