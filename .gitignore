@@ -1,3 +1,7 @@
+asset_backup.backup
+asset-management.sql
+
+.env
 # Logs
 logs
 *.log

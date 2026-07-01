@@ -11,7 +11,7 @@ import CreateAsset from "./pages/CreateAssets";
 import EditAsset from "./pages/EditAsset";
 import CreateEmployee from "./components/CreateEmployee";
 import EditEmployee from "./components/EditEmployee";
-import {ToastContainer } from "react-toastify"
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -31,9 +31,10 @@ function App() {
           <Route path="/assets/edit/:id" element={<EditAsset />} />
           <Route path="/employees/create" element={<CreateEmployee />} />
           <Route path="/employees/edit/:id" element={<EditEmployee />} />
+          <Route path="*" element={<Dashboard />} />
         </Routes>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }
