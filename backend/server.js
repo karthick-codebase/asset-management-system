@@ -1,7 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const { Employee } = require("./models/employee.js");
+<<<<<<< HEAD
 const category = require("./models/category.js");
+=======
+const Category = require("./models/category.js");
+>>>>>>> 20a3581c803bf8dae2ef34f07b758c00def71d41
 const assets = require("./models/asset.js");
 const assetHistories = require("./models/assetHistory.js");
 const categoryRoutes = require("./routes/categoryRoutes.js");
@@ -22,7 +26,10 @@ if (process.env.NODE_ENV !== "production") {
 
 app.use(express.json());
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 20a3581c803bf8dae2ef34f07b758c00def71d41
 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/employees", employeeRoutes);
