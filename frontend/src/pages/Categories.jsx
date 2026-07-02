@@ -48,47 +48,53 @@ const Categories = () => {
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-4">Name</th>
+        {categories.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left p-4">Name</th>
 
-                <th className="text-left p-4">Created</th>
+                  <th className="text-left p-4">Created</th>
 
-                <th className="text-left p-4">Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {categories.map((cat) => (
-                <tr key={cat.id} className="border-b hover:bg-slate-50">
-                  <td className="p-4 font-medium">{cat.name}</td>
-
-                  <td className="p-4 text-slate-500">
-                    {new Date(cat.createdAt).toLocaleDateString()}
-                  </td>
-
-                  <td className="p-4 flex gap-3">
-                    <button
-                      onClick={() => setEditCategory(cat)}
-                      className="px-4 py-2 bg-yellow-500 text-white rounded-xl"
-                    >
-                      <FaEdit />
-                    </button>
-
-                    <button
-                      onClick={() => setDeleteId(cat.id)}
-                      className="px-4 py-2 bg-red-600 text-white rounded-xl"
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
+                  <th className="text-left p-4">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+
+              <tbody>
+                {categories.map((cat) => (
+                  <tr key={cat.id} className="border-b hover:bg-slate-50">
+                    <td className="p-4 font-medium">{cat.name}</td>
+
+                    <td className="p-4 text-slate-500">
+                      {new Date(cat.createdAt).toLocaleDateString()}
+                    </td>
+
+                    <td className="p-4 flex gap-3">
+                      <button
+                        onClick={() => setEditCategory(cat)}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-xl"
+                      >
+                        <FaEdit />
+                      </button>
+
+                      <button
+                        onClick={() => setDeleteId(cat.id)}
+                        className="px-4 py-2 bg-red-600 text-white rounded-xl"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="p-5 text-center text-3xl text-red-500 font-bold text-nowrap w-full"x>
+            The Category are Empty
+          </div>
+        )}
       </div>
 
       {showAdd && (

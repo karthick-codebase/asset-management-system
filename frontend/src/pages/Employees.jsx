@@ -83,7 +83,7 @@ const Employees = () => {
     <div className="space-y-6">
       {/* Header */}
 
-      <div className="bg-white rounded-3xl shadow-lg p-6 flex justify-between items-center ">
+      <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col gap-5 sm:flex-row justify-between sm:items-center ">
         <div>
           <h1 className="text-3xl font-bold text-slate-800">Employees</h1>
 
@@ -99,8 +99,8 @@ const Employees = () => {
       </div>
 
       {/* filter and search option */}
-      <div className="flex gap-5 justify-between items-center bg-violet-400/30 p-3 rounded-xl">
-        <div className="p-5">
+      <div className="flex flex-col sm:flex-row gap-1 shrink sm:gap-5 justify-between items-center bg-violet-400/30 p-3 rounded-xl">
+        <div className="p-5 flex gap-2 justify-between">
           <select
             name="department"
             id="department"
@@ -113,8 +113,7 @@ const Employees = () => {
               <option key={index}>{data}</option>
             ))}
           </select>
-        </div>
-        <div className="p-5">
+
           <select
             name="branch"
             id="branch"
@@ -129,13 +128,14 @@ const Employees = () => {
           </select>
         </div>
         {/* Search */}
-        <div className="bg-white rounded-3xl flex gap-2 items-center relative">
+        <div className=" flex gap-2 items-center relative w-full sm:w-2/5">
           <input
             type="text"
             placeholder="Search employee..."
+            name="name"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full md:w-96 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-3 w-full rounded-3xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <FaSearch
             className="absolute right-4 hover:cursor-pointer"
@@ -147,13 +147,13 @@ const Employees = () => {
 
       {/* Table */}
 
-      <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-lg overflow-x-auto">
         {filteredEmployees && filteredEmployees.length > 0 ? (
           <div>
             <table className="w-full">
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="p-5 text-left">#</th>
+                  <th className="p-5 text-left">S.No</th>
 
                   <th className="p-5 text-left">Name</th>
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, px } from "framer-motion";
 import {
   FaLaptop,
   FaUserTie,
@@ -42,7 +42,68 @@ function Dashboard() {
 
   if (!stats) {
     return (
-      <div className="text-center py-20 text-lg">Loading Dashboard...</div>
+      <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+        width={250}
+        height={100}
+        viewBox="0 0 200 200">
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            stroke-width="3"
+            r="15"
+            cx="40"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4"
+            ></animate>
+          </circle>
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            stroke-width="3"
+            r="15"
+            cx="100"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2"
+            ></animate>
+          </circle>
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            stroke-width="3"
+            r="15"
+            cx="160"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0"
+            ></animate>
+          </circle>
+        </svg>
+        Loading Dashboard...
+      </div>
     );
   }
 

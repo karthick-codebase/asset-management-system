@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { Employee } = require("./models/employee.js");
-const Category = require("./models/Category");
+const category = require("./models/category.js");
 const assets = require("./models/asset.js");
 const assetHistories = require("./models/assetHistory.js");
 const categoryRoutes = require("./routes/categoryRoutes.js");
@@ -22,9 +22,7 @@ if (process.env.NODE_ENV !== "production") {
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
+
 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/employees", employeeRoutes);
