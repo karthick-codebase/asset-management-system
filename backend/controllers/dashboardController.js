@@ -1,7 +1,7 @@
-const Asset = require("../models/Asset");
-const Employee = require("../models/Employee");
-const Category = require("../models/Category");
-const AssetHistory = require("../models/AssetHistory");
+const Asset = require("../models/asset");
+const Employee = require("../models/employee");
+const Category = require("../models/category");
+const AssetHistory = require("../models/assetHistory");
 
 exports.getStats = async (req, res) => {
   try {
