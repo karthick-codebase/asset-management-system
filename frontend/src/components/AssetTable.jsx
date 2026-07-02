@@ -8,7 +8,7 @@ const AssetTable = ({ assets, onDelete }) => {
   return (
     <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
       <div className="overflow-x-auto">
-        {assets.lenght > 0 ? (
+        {assets.length > 0 ? (
           <table className="w-full">
             <thead className="bg-blue-600 text-white">
               <tr>
