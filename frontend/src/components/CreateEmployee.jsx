@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 
 const CreateEmployee = () => {
   const navigate = useNavigate();
@@ -25,12 +25,70 @@ const CreateEmployee = () => {
     });
   };
 
+  const validateForm = () => {
+    if (!form.name.trim()) {
+      toast.error("Employee name is required");
+      return false;
+    }
+
+    if (!form.employee_id.trim()) {
+      toast.error("Employee ID is required");
+      return false;
+    }
+
+    if (!form.email.trim()) {
+      toast.error("Email is required");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(form.email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+
+    if (!form.phone.trim()) {
+      toast.error("Phone number is required");
+      return false;
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!phoneRegex.test(form.phone)) {
+      toast.error("Phone number must contain 10 digits");
+      return false;
+    }
+
+    if (!form.department.trim()) {
+      toast.error("Department is required");
+      return false;
+    }
+
+    if (!form.branch.trim()) {
+      toast.error("Branch is required");
+      return false;
+    }
+
+    if (!form.joining_date) {
+      toast.error("Joining date is required");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return
+    } 
 
     try {
       const response = await API.post("/employees", form);
-      toast.success("The New  Employee Created Successfully",{autoClose:2000});
+      toast.success("The New  Employee Created Successfully", {
+        autoClose: 2000,
+      });
       navigate("/employees");
     } catch (error) {
       console.log(error);
@@ -73,6 +131,7 @@ const CreateEmployee = () => {
             value={form.phone}
             onChange={handleChange}
             className="w-full px-4 py-3 border rounded-xl"
+            type="tel"
           />
 
           <input

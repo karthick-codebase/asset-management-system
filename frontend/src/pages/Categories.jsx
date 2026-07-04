@@ -91,7 +91,7 @@ const Categories = () => {
             </table>
           </div>
         ) : (
-          <div className="p-5 text-center text-3xl text-red-500 font-bold text-nowrap w-full"x>
+          <div className="p-5 text-center text-3xl text-red-500 font-bold text-nowrap w-full">
             The Category are Empty
           </div>
         )}
@@ -101,6 +101,7 @@ const Categories = () => {
         <AddCategoryModal
           closeModal={() => setShowAdd(false)}
           refresh={fetchCategories}
+          categoriesData={categories}
         />
       )}
 
@@ -109,6 +110,7 @@ const Categories = () => {
           category={editCategory}
           closeModal={() => setEditCategory(null)}
           refresh={fetchCategories}
+          categoriesData ={categories}
         />
       )}
 

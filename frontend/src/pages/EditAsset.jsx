@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "../services/api";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 const EditAsset = () => {
   const { id } = useParams();
 
@@ -69,8 +69,55 @@ const EditAsset = () => {
     });
   };
 
+  const validateForm = () => {
+    if (!form.asset_name.trim()) {
+      toast.error("Asset name is required");
+      return false;
+    }
+    const allowNumbersButNotOnlyNumbers = /^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$/;
+
+    if (!allowNumbersButNotOnlyNumbers.test(form.asset_name)) {
+      toast.error("This is not a Valid asset name");
+      return false;
+    }
+
+    if (!form.asset_id.trim()) {
+      toast.error("Asset ID is required");
+      return false;
+    }
+
+    if (!form.serial_number.trim()) {
+      toast.error("Serial Number is required");
+      return false;
+    }
+
+    if (!form.make.trim()) {
+      toast.error("Make is required");
+      return false;
+    }
+
+    if (!form.model.trim()) {
+      toast.error("Model is required");
+      return false;
+    }
+
+    if (!form.branch.trim()) {
+      toast.error("Branch is required");
+      return false;
+    }
+
+    if (!form.category_id) {
+      toast.error("Please select a category");
+      return false;
+    }
+
+    return true;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       await API.put(`/assets/${id}`, form);

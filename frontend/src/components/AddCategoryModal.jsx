@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { toast } from "react-toastify";
-const AddCategoryModal = ({ closeModal, refresh }) => {
+const AddCategoryModal = ({ closeModal, refresh, categoriesData }) => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState(categoriesData);
 
   const navigate = useNavigate();
 
@@ -12,7 +13,15 @@ const AddCategoryModal = ({ closeModal, refresh }) => {
     e.preventDefault();
 
     if (!name.trim()) {
-      alert("Category name required");
+      toast.error("Category name required");
+      return;
+    }
+    const isDuplicate = categories.some(
+      (item) => item.name.toLowerCase() === name.toLowerCase(),
+    );
+
+    if (isDuplicate) {
+      toast.error("This Category is already Exist");
       return;
     }
 
@@ -23,7 +32,7 @@ const AddCategoryModal = ({ closeModal, refresh }) => {
         name,
       });
       toast.success("Category created Successfully", { autoClose: 2000 });
-      closeModal()
+      closeModal();
       navigate("/categories");
     } catch (error) {
       console.log(error);

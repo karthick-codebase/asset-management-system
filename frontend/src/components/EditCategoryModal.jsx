@@ -2,10 +2,22 @@ import React, { useState } from "react";
 import API from "../services/api";
 import { toast } from "react-toastify";
 
-const EditCategoryModal = ({ closeModal, category, refresh }) => {
+const EditCategoryModal = ({ closeModal, category, refresh, categoriesData }) => {
   const [name, setName] = useState(category.name);
+  const [categories, setCategories] = useState(categoriesData)
 
   const handleUpdate = async () => {
+    if (!name.trim()) {
+      toast.error("Category name required");
+      return;
+    }
+    const isDuplicate = categories.some(
+      (item) => item.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (isDuplicate) {
+      toast.error("This Category is Already Exist");
+      return
+    }
     try {
       await API.put(`/categories/${category.id}`, {
         name,
