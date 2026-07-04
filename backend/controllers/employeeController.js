@@ -1,18 +1,84 @@
 const Employee = require("../models/employee");
+const { Op } = require("sequelize");
 
 // Create Employee
 const createEmployee = async (req, res) => {
   try {
-    const employee = await Employee.create(req.body);
+    const {
+      name,
+      employee_id,
+      email,
+      phone,
+      department,
+      branch,
+      joining_date,
+      status,
+    } = req.body;
 
-    res.status(201).json({
-      success:"true",
-      message:"employee added successfully",
-      data:employee
+    // Required Fields
+    if (!name || !employee_id || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, Employee ID and Email are required.",
+      });
+    }
+
+    // Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    // Employee ID / Email Duplicate Check
+    const existingEmployee = await Employee.findOne({
+      where: {
+        [Op.or]: [{ employee_id }, { email }],
+      },
+    });
+
+    if (existingEmployee) {
+      if (existingEmployee.employee_id === employee_id) {
+        return res.status(409).json({
+          success: false,
+          message: "Employee ID already exists.",
+        });
+      }
+
+      if (existingEmployee.email === email) {
+        return res.status(409).json({
+          success: false,
+          message: "Email address already exists.",
+        });
+      }
+    }
+
+    // Create Employee
+    const employee = await Employee.create({
+      name,
+      employee_id,
+      email,
+      phone,
+      department,
+      branch,
+      joining_date,
+      status,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Employee created successfully.",
+      data: employee,
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while creating the employee.",
     });
   }
 };
@@ -67,20 +133,94 @@ const getEmployeeById = async (req, res) => {
 // Update Employee
 const updateEmployee = async (req, res) => {
   try {
-    const employee = await Employee.findByPk(req.params.id);
+    const { id } = req.params;
+
+    const {
+      name,
+      employee_id,
+      email,
+      phone,
+      department,
+      branch,
+      joining_date,
+      status,
+    } = req.body;
+
+    const employee = await Employee.findByPk(id);
 
     if (!employee) {
       return res.status(404).json({
-        message: "Employee not found",
+        success: false,
+        message: "Employee not found.",
       });
     }
 
-    await employee.update(req.body);
+    // Required Fields
+    if (!name || !employee_id || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, Employee ID and Email are required.",
+      });
+    }
 
-    res.status(200).json(employee);
+    // Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    // Duplicate Check (Exclude Current Employee)
+    const existingEmployee = await Employee.findOne({
+      where: {
+        id: {
+          [Op.ne]: id,
+        },
+        [Op.or]: [{ employee_id }, { email }],
+      },
+    });
+
+    if (existingEmployee) {
+      if (existingEmployee.employee_id === employee_id) {
+        return res.status(409).json({
+          success: false,
+          message: "Employee ID already exists.",
+        });
+      }
+
+      if (existingEmployee.email === email) {
+        return res.status(409).json({
+          success: false,
+          message: "Email address already exists.",
+        });
+      }
+    }
+
+    await employee.update({
+      name,
+      employee_id,
+      email,
+      phone,
+      department,
+      branch,
+      joining_date,
+      status,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Employee updated successfully.",
+      data: employee,
+    });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while updating the employee.",
     });
   }
 };

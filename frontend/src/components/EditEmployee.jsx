@@ -87,17 +87,23 @@ const EditEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      return
+      return;
     }
 
     try {
-      await API.put(`/employees/${id}`, form);
-      toast.success("Employee Detail Updated Successfully", {
-        autoClose: 2000,
-      });
+      const response = await API.put(`/employees/${id}`, form);
+      if (response.success) {
+        toast.success("Employee Detail Updated Successfully", {
+          autoClose: 2000,
+        });
+      }
       navigate("/employees");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong...");
+      }
     }
   };
 

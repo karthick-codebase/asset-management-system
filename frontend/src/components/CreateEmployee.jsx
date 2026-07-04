@@ -80,18 +80,24 @@ const CreateEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return
+     if (!validateForm()) {
+      return;
     } 
 
     try {
       const response = await API.post("/employees", form);
-      toast.success("The New  Employee Created Successfully", {
-        autoClose: 2000,
-      });
+      if (response.data.success) {
+        toast.success("Employee created successfully!", {
+          autoClose: 2000,
+        });
+      }
       navigate("/employees");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 
