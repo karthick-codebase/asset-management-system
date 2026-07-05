@@ -6,17 +6,80 @@ const { Op } = require("sequelize");
 // Create Asset
 exports.createAsset = async (req, res) => {
   try {
-    const asset = await Asset.create(req.body);
+    const {
+      asset_name,
+      asset_id,
+      serial_number,
+      make,
+      model,
+      branch,
+      category_id,
+    } = req.body;
 
-    res.status(201).json({
+    // Required Fields
+    if (!asset_name || !asset_id || !serial_number || !category_id) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Asset Name, Asset ID, Serial Number and Category are required.",
+      });
+    }
+
+    // Category Validation
+    const category = await Category.findByPk(category_id);
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Selected category does not exist.",
+      });
+    }
+
+    // Duplicate Validation
+    const existingAsset = await Asset.findOne({
+      where: {
+        [Op.or]: [{ asset_id }, { serial_number }],
+      },
+    });
+
+    if (existingAsset) {
+      if (existingAsset.asset_id === asset_id) {
+        return res.status(409).json({
+          success: false,
+          message: "Asset ID already exists.",
+        });
+      }
+
+      if (existingAsset.serial_number === serial_number) {
+        return res.status(409).json({
+          success: false,
+          message: "Serial Number already exists.",
+        });
+      }
+    }
+
+    // Create Asset
+    const asset = await Asset.create({
+      asset_name,
+      asset_id,
+      serial_number,
+      make,
+      model,
+      branch,
+      category_id,
+    });
+
+    return res.status(201).json({
       success: true,
-      message: "Asset created successfully",
+      message: "Asset created successfully.",
       data: asset,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something went wrong while creating the asset.",
     });
   }
 };
@@ -132,26 +195,95 @@ exports.getAssetById = async (req, res) => {
 // Update Asset
 exports.updateAsset = async (req, res) => {
   try {
-    const asset = await Asset.findByPk(req.params.id);
+    const { id } = req.params;
+
+    const {
+      asset_name,
+      asset_id,
+      serial_number,
+      make,
+      model,
+      branch,
+      category_id,
+    } = req.body;
+
+    // Check Asset
+    const asset = await Asset.findByPk(id);
 
     if (!asset) {
       return res.status(404).json({
         success: false,
-        message: "Asset not found",
+        message: "Asset not found.",
       });
     }
 
-    await asset.update(req.body);
+    // Required Fields
+    if (!asset_name || !asset_id || !serial_number || !category_id) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Asset Name, Asset ID, Serial Number and Category are required.",
+      });
+    }
 
-    res.status(200).json({
+    // Check Category
+    const category = await Category.findByPk(category_id);
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Selected category does not exist.",
+      });
+    }
+
+    // Check Duplicate Asset ID / Serial Number
+    const existingAsset = await Asset.findOne({
+      where: {
+        id: {
+          [Op.ne]: id,
+        },
+        [Op.or]: [{ asset_id }, { serial_number }],
+      },
+    });
+
+    if (existingAsset) {
+      if (existingAsset.asset_id === asset_id) {
+        return res.status(409).json({
+          success: false,
+          message: "Asset ID already exists.",
+        });
+      }
+
+      if (existingAsset.serial_number === serial_number) {
+        return res.status(409).json({
+          success: false,
+          message: "Serial Number already exists.",
+        });
+      }
+    }
+
+    // Update Asset
+    await asset.update({
+      asset_name,
+      asset_id,
+      serial_number,
+      make,
+      model,
+      branch,
+      category_id,
+    });
+
+    return res.status(200).json({
       success: true,
-      message: "Asset updated successfully",
+      message: "Asset updated successfully.",
       data: asset,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something went wrong while updating the asset.",
     });
   }
 };

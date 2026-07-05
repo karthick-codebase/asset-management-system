@@ -5,16 +5,19 @@ import { motion } from "framer-motion";
 
 const History = () => {
   const [history, setHistory] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
 
   const fetchHistory = async () => {
     try {
+      setLoading(true);
       const res = await API.get("/history");
 
       setHistory(res.data.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,6 +30,80 @@ const History = () => {
 
     return item.action === filter;
   });
+
+if (loading) {
+  return (
+    <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
+      <svg
+        xmlns="http://w3.org"
+        width={250}
+        height={100}
+        viewBox="0 0 200 200"
+      >
+        {/* First Circle: Starts at the bottom (135) to match its -.4s animation offset */}
+        <circle
+          fill="#FF156D"
+          stroke="#FF156D"
+          strokeWidth="2"
+          r="15"
+          cx="40"
+          cy="135" 
+        >
+          <animate
+            attributeName="cy"
+            calcMode="spline"
+            dur="2"
+            values="65;135;65;"
+            keySplines=".5 0 .5 1;.5 0 .5 1"
+            repeatCount="indefinite"
+            begin="-.4"
+          />
+        </circle>
+
+        {/* Second Circle: Starts halfway down (100) to match its -.2s animation offset */}
+        <circle
+          fill="#FF156D"
+          stroke="#FF156D"
+          strokeWidth="2"
+          r="15"
+          cx="100"
+          cy="100"
+        >
+          <animate
+            attributeName="cy"
+            calcMode="spline"
+            dur="2"
+            values="65;135;65;"
+            keySplines=".5 0 .5 1;.5 0 .5 1"
+            repeatCount="indefinite"
+            begin="-.2"
+          />
+        </circle>
+
+        {/* Third Circle: Starts at the top (65) because it has no delay (begin="0") */}
+        <circle
+          fill="#FF156D"
+          stroke="#FF156D"
+          strokeWidth="3"
+          r="15"
+          cx="160"
+          cy="65"
+        >
+          <animate
+            attributeName="cy"
+            calcMode="spline"
+            dur="2"
+            values="65;135;65;"
+            keySplines=".5 0 .5 1;.5 0 .5 1"
+            repeatCount="indefinite"
+            begin="0"
+          />
+        </circle>
+      </svg>
+      Loading History...
+    </div>
+  );
+}
 
   return (
     <div className="space-y-6">

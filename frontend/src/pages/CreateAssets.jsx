@@ -87,15 +87,16 @@ const CreateAsset = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    /* if (!validateForm()) return; */
 
     try {
-      await API.post("/assets", form);
+      const response = await API.post("/assets", form);
 
-      toast.success("Asset created successfully", {
-        autoClose: 2000,
-      });
-
+      if (response.data.success) {
+        toast.success(response.message, {
+          autoClose: 2000,
+        });
+      }
       navigate("/assets");
     } catch (error) {
       if (error.response?.data?.message) {

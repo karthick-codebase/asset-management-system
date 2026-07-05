@@ -9,7 +9,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
 
   const [editCategory, setEditCategory] = useState(null);
@@ -18,18 +18,94 @@ const Categories = () => {
 
   const fetchCategories = async () => {
     try {
+      setLoading(true);
       const res = await API.get("/categories");
 
       setCategories(res.data.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCategories();
-  }, [categories]);
+  }, []);
 
+  if (loading) {
+    return (
+      <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
+        <svg
+          xmlns="http://w3.org"
+          width={250}
+          height={100}
+          viewBox="0 0 200 200"
+        >
+          {/* First Circle: Starts at the bottom (135) to match its -.4s animation offset */}
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            strokeWidth="2"
+            r="15"
+            cx="40"
+            cy="135"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4"
+            />
+          </circle>
+
+          {/* Second Circle: Starts halfway down (100) to match its -.2s animation offset */}
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            strokeWidth="2"
+            r="15"
+            cx="100"
+            cy="100"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2"
+            />
+          </circle>
+
+          {/* Third Circle: Starts at the top (65) because it has no delay (begin="0") */}
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            strokeWidth="3"
+            r="15"
+            cx="160"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0"
+            />
+          </circle>
+        </svg>
+        Loading Category...
+      </div>
+    );
+  }
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="bg-white rounded-3xl shadow-lg p-6">
@@ -110,7 +186,7 @@ const Categories = () => {
           category={editCategory}
           closeModal={() => setEditCategory(null)}
           refresh={fetchCategories}
-          categoriesData ={categories}
+          categoriesData={categories}
         />
       )}
 

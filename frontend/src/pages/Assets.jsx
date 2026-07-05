@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const Assets = () => {
   const [assets, setAssets] = useState([]);
   const [search, setSearch] = useState("");
+  const [Loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -14,6 +15,7 @@ const Assets = () => {
 
   const fetchAssets = async () => {
     try {
+      setLoading(true);
       const res = await API.get(
         `/assets?page=${page}&search=${search}&status=${status}`,
       );
@@ -22,6 +24,8 @@ const Assets = () => {
       setTotalPages(res.data.pages);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +56,72 @@ const Assets = () => {
     );
     setPage(1);
   };
-
+  if (Loading) {
+    return (
+      <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+        width={250}
+        height={100}
+        viewBox="0 0 200 200">
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            stroke-width="3"
+            r="15"
+            cx="40"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4"
+            ></animate>
+          </circle>
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            stroke-width="3"
+            r="15"
+            cx="100"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2"
+            ></animate>
+          </circle>
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            stroke-width="3"
+            r="15"
+            cx="160"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0"
+            ></animate>
+          </circle>
+        </svg>
+        Loading Assets...
+      </div>
+    );
+  }
   return (
     <div>
       {/* header */}

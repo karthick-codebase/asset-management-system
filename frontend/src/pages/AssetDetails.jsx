@@ -245,7 +245,7 @@ const AssetDetails = () => {
       </motion.div>
       <motion.div
         whileHover={{ y: -5 }}
-        className="grid grid-cols-2 items-center justify-between bg-white  shadow-lg rounded-3xl"
+        className="grid grid-cols-1 sm:grid-cols-2 items-center justify-between bg-white  shadow-lg rounded-3xl"
       >
         {/* Actions */}
         <div className="rounded-3xl p-6">
