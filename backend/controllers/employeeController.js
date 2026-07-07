@@ -1,5 +1,5 @@
 const Employee = require("../models/employee");
-const { Op } = require("sequelize");
+const { Op, json } = require("sequelize");
 
 // Create Employee
 const createEmployee = async (req, res) => {
@@ -20,6 +20,15 @@ const createEmployee = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Name, Employee ID and Email are required.",
+      });
+    }
+
+    const nameRegex = /^[A-Za-z\s]+$/;
+
+    if (!nameRegex.test(name)) {
+      return res.status(400).json({
+        success: false,
+        message: "Name must contain only alphabets.",
       });
     }
 

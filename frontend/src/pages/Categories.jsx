@@ -108,8 +108,8 @@ const Categories = () => {
   }
   return (
     <div className="max-w-6xl mx-auto p-6">
-      <div className="bg-white rounded-3xl shadow-lg p-6">
-        <div className="flex justify-between items-center mb-6">
+      <div className="rounded-3xl">
+        <div className="flex justify-between items-center mb-6 gap-6 flex-wrap bg-white shadow-lg p-6 rounded-3xl">
           <div>
             <h1 className="text-3xl font-bold text-slate-800">Categories</h1>
 
@@ -125,7 +125,7 @@ const Categories = () => {
         </div>
 
         {categories.length > 0 ? (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto mt-4 bg-white shadow-lg rounded-xl">
             <table className="w-full">
               <thead>
                 <tr className="border-b">

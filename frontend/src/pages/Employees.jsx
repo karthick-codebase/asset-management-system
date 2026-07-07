@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
 import { data, Link } from "react-router-dom";
-import { FaEdit, FaTrash, FaPlus, FaSearch } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaSearch, FaEye } from "react-icons/fa";
 import DeleteEmployeeModal from "../components/DeleteEmployeeModal";
 import { toast } from "react-toastify";
+import EmployeeDetailsModal from "../components/EmployeeDetails";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
-  const [loading, setLoading]= useState(true)
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
   const [page, setPage] = useState(1);
 
   const [totalPages, setTotalPages] = useState(1);
@@ -29,15 +31,15 @@ const Employees = () => {
 
   const fetchEmployees = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await API.get(`/employees?page=${page}`);
 
       setEmployees(res.data.data);
       setTotalPages(res.data.pages);
     } catch (error) {
       console.log(error);
-    }finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,17 +84,19 @@ const Employees = () => {
     }
   };
 
-    if (loading) {
+  if (loading) {
     return (
       <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" 
-        width={250}
-        height={100}
-        viewBox="0 0 200 200">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={250}
+          height={100}
+          viewBox="0 0 200 200"
+        >
           <circle
             fill="#FF156D"
             stroke="#FF156D"
-            stroke-width="3"
+            strokeWidth="3"
             r="15"
             cx="40"
             cy="65"
@@ -110,7 +114,7 @@ const Employees = () => {
           <circle
             fill="#FF156D"
             stroke="#FF156D"
-            stroke-width="3"
+            strokeWidth="3"
             r="15"
             cx="100"
             cy="65"
@@ -128,7 +132,7 @@ const Employees = () => {
           <circle
             fill="#FF156D"
             stroke="#FF156D"
-            stroke-width="3"
+            strokeWidth="3"
             r="15"
             cx="160"
             cy="65"
@@ -261,6 +265,17 @@ const Employees = () => {
 
                     <td className="p-5">
                       <div className="flex justify-center gap-3">
+                        <button
+                          onClick={() => {
+                            setSelectedEmployee(emp);
+                            setShowDetails(true);
+                          }}
+                          className="p-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+                          title="View Employee"
+                        >
+                          <FaEye />
+                        </button>
+
                         <Link to={`/employees/edit/${emp.id}`}>
                           <button className="p-3 rounded-xl bg-yellow-500 text-white">
                             <FaEdit />
@@ -315,6 +330,16 @@ const Employees = () => {
         <DeleteEmployeeModal
           closeModal={() => setShowDelete(false)}
           confirmDelete={handleDelete}
+        />
+      )}
+
+      {showDetails && (
+        <EmployeeDetailsModal
+          employee={selectedEmployee}
+          closeModal={() => {
+            setShowDetails(false);
+            setSelectedEmployee(null);
+          }}
         />
       )}
     </div>
