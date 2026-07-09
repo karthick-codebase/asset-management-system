@@ -7,6 +7,7 @@ const AssignAssetModal = ({ closeModal, assetId, refreshAsset }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [search, setSearch] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [reason, setReason] = useState("");
 
   const handleAssign = async () => {
     if (!selectedEmployee) {
@@ -25,13 +26,13 @@ const AssignAssetModal = ({ closeModal, assetId, refreshAsset }) => {
 
         employeeId: selectedEmployee,
 
-        reason: "Asset assigned from dashboard",
+        reason: reason,
       });
 
       await refreshAsset();
 
       closeModal();
-      toast.success("Asset Assign Successfully",{autoClose:2000})
+      toast.success("Asset Assign Successfully", { autoClose: 2000 });
     } catch (error) {
       console.log(error);
     }
@@ -79,18 +80,19 @@ const AssignAssetModal = ({ closeModal, assetId, refreshAsset }) => {
         <h2 className="text-2xl font-bold text-slate-800 mb-5">Assign Asset</h2>
 
         {/* Search Dropdown */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search employee..."
-            value={search}
-            onFocus={() => setShowDropdown(true)}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setSelectedEmployee("");
-              setShowDropdown(true);
-            }}
-            className="
+        <div>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search employee..."
+              value={search}
+              onFocus={() => setShowDropdown(true)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setSelectedEmployee("");
+                setShowDropdown(true);
+              }}
+              className="
               w-full
               border
               rounded-xl
@@ -100,11 +102,10 @@ const AssignAssetModal = ({ closeModal, assetId, refreshAsset }) => {
               focus:ring-2
               focus:ring-green-500
             "
-          />
-
-          {showDropdown && (
-            <div
-              className="
+            />
+            {showDropdown && (
+              <div
+                className="
                 absolute
                 top-full
                 left-0
@@ -118,53 +119,50 @@ const AssignAssetModal = ({ closeModal, assetId, refreshAsset }) => {
                 overflow-y-auto
                 z-[100]
               "
-            >
-              {filteredEmployees.length > 0 ? (
-                filteredEmployees.map((emp) => (
-                  <div
-                    key={emp.id}
-                    onClick={() => {
-                      setSelectedEmployee(emp.id);
+              >
+                {filteredEmployees.length > 0 ? (
+                  filteredEmployees.map((emp) => (
+                    <div
+                      key={emp.id}
+                      onClick={() => {
+                        setSelectedEmployee(emp.id);
 
-                      setSearch(emp.name);
+                        setSearch(emp.name);
 
-                      setShowDropdown(false);
-                    }}
-                    className="
+                        setShowDropdown(false);
+                      }}
+                      className="
                       px-4
                       py-3
                       cursor-pointer
                       hover:bg-slate-100
                     "
-                  >
-                    <p className="font-medium text-slate-800">{emp.name}</p>
+                    >
+                      <p className="font-medium text-slate-800">{emp.name}</p>
 
-                    <p className="text-sm text-slate-500">{emp.employee_id}</p>
-                  </div>
-                ))
-              ) : (
-                <p className="px-4 py-3 text-slate-500">No employee found</p>
-              )}
-            </div>
-          )}
+                      <p className="text-sm text-slate-500">
+                        {emp.employee_id}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="px-4 py-3 text-slate-500">No employee found</p>
+                )}
+              </div>
+            )}
+          </div>
+          <textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="Reason for Assign..."
+            className=" mt-5 w-full border rounded-xl px-4 py-3 h-28 resize-none"
+          />
         </div>
 
-        <div
-          className="
-            flex
-            justify-end
-            gap-3
-            mt-6
-          "
-        >
+        <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={closeModal}
-            className="
-              px-5
-              py-2
-              rounded-xl
-              bg-slate-200
-            "
+            className=" px-5 py-2 rounded-xl bg-slate-200"
           >
             Cancel
           </button>

@@ -7,13 +7,16 @@ const History = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchHistory = async () => {
     try {
       setLoading(true);
-      const res = await API.get("/history");
+      const res = await API.get(`/history?page=${page}`);
 
       setHistory(res.data.data);
+      setTotalPages(res.data.pages);
     } catch (error) {
       console.log(error);
     } finally {
@@ -23,7 +26,7 @@ const History = () => {
 
   useEffect(() => {
     fetchHistory();
-  }, []);
+  }, [page]);
 
   const filteredHistory = history.filter((item) => {
     if (filter === "all") return true;
@@ -31,79 +34,79 @@ const History = () => {
     return item.action === filter;
   });
 
-if (loading) {
-  return (
-    <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
-      <svg
-        xmlns="http://w3.org"
-        width={250}
-        height={100}
-        viewBox="0 0 200 200"
-      >
-        {/* First Circle: Starts at the bottom (135) to match its -.4s animation offset */}
-        <circle
-          fill="#FF156D"
-          stroke="#FF156D"
-          strokeWidth="2"
-          r="15"
-          cx="40"
-          cy="135" 
+  if (loading) {
+    return (
+      <div className="text-center py-20 text-lg flex flex-col justify-center items-center">
+        <svg
+          xmlns="http://w3.org"
+          width={250}
+          height={100}
+          viewBox="0 0 200 200"
         >
-          <animate
-            attributeName="cy"
-            calcMode="spline"
-            dur="2"
-            values="65;135;65;"
-            keySplines=".5 0 .5 1;.5 0 .5 1"
-            repeatCount="indefinite"
-            begin="-.4"
-          />
-        </circle>
+          {/* First Circle: Starts at the bottom (135) to match its -.4s animation offset */}
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            strokeWidth="2"
+            r="15"
+            cx="40"
+            cy="135"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4"
+            />
+          </circle>
 
-        {/* Second Circle: Starts halfway down (100) to match its -.2s animation offset */}
-        <circle
-          fill="#FF156D"
-          stroke="#FF156D"
-          strokeWidth="2"
-          r="15"
-          cx="100"
-          cy="100"
-        >
-          <animate
-            attributeName="cy"
-            calcMode="spline"
-            dur="2"
-            values="65;135;65;"
-            keySplines=".5 0 .5 1;.5 0 .5 1"
-            repeatCount="indefinite"
-            begin="-.2"
-          />
-        </circle>
+          {/* Second Circle: Starts halfway down (100) to match its -.2s animation offset */}
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            strokeWidth="2"
+            r="15"
+            cx="100"
+            cy="100"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2"
+            />
+          </circle>
 
-        {/* Third Circle: Starts at the top (65) because it has no delay (begin="0") */}
-        <circle
-          fill="#FF156D"
-          stroke="#FF156D"
-          strokeWidth="3"
-          r="15"
-          cx="160"
-          cy="65"
-        >
-          <animate
-            attributeName="cy"
-            calcMode="spline"
-            dur="2"
-            values="65;135;65;"
-            keySplines=".5 0 .5 1;.5 0 .5 1"
-            repeatCount="indefinite"
-            begin="0"
-          />
-        </circle>
-      </svg>
-      Loading History...
-    </div>
-  );
-}
+          {/* Third Circle: Starts at the top (65) because it has no delay (begin="0") */}
+          <circle
+            fill="#FF156D"
+            stroke="#FF156D"
+            strokeWidth="3"
+            r="15"
+            cx="160"
+            cy="65"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0"
+            />
+          </circle>
+        </svg>
+        Loading History...
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -196,8 +199,8 @@ if (loading) {
                   )}
                 </div>
 
-                <div className="bg-slate-50 rounded-2xl border p-5 flex-1">
-                  <div className="flex justify-between">
+                <div className="bg-slate-50 rounded-2xl border p-5 flex-1 capitalize">
+                  <div className="flex justify-between ">
                     <h2 className="font-bold text-xl capitalize">
                       {item.action}
                     </h2>
@@ -213,7 +216,7 @@ if (loading) {
                     <div className="flex items-center gap-2">
                       <FaBox className="text-blue-600" />
 
-                      {item.Asset?.asset_name}
+                      {item.Asset?.asset_name ||"Deleted"}
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -227,6 +230,41 @@ if (loading) {
             ))}
           </div>
         )}
+      </div>
+      <div className="flex items-center justify-evenly bg-white rounded-2xl shadow-lg p-4">
+        <p className="text-slate-600">
+          Page {page} of {totalPages}
+        </p>
+
+        <div className="flex gap-3">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="
+        px-4
+        py-2
+        rounded-lg
+        border
+        disabled:opacity-50
+      "
+          >
+            Previous
+          </button>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="
+        px-4
+        py-2
+        rounded-lg
+        border
+        disabled:opacity-50
+      "
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

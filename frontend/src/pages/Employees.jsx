@@ -21,10 +21,10 @@ const Employees = () => {
   const [showDelete, setShowDelete] = useState(false);
 
   const uniqBranches = [
-    ...new Set(employees.map((emp) => emp.branch.toLowerCase())),
+    ...new Set(employees.map((emp) => emp.branch.toLowerCase().trim())),
   ];
   const uniqDepartment = [
-    ...new Set(employees.map((emp) => emp.department.toLowerCase())),
+    ...new Set(employees.map((emp) => emp.department.toLowerCase().trim())),
   ];
   const [department, setDepartment] = useState("");
   const [branch, setBranch] = useState("");

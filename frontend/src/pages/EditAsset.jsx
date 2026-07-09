@@ -120,14 +120,21 @@ const EditAsset = () => {
     }
 
     try {
-      await API.put(`/assets/${id}`, form);
-      toast.success("Asset Detail Updated Successfully", {
-        autoClose: 2000,
-      });
+      const response = await API.put(`/assets/${id}`, form);
+
+      if (response.data.success) {
+        toast.success("Asset Detail Updated Successfully", {
+          autoClose: 2000,
+        });
+      }
 
       navigate(`/assets/${id}`);
     } catch (error) {
-      console.log(error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
 

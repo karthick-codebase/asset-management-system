@@ -22,7 +22,7 @@ const ReturnAssetModal = ({ closeModal, assetId, refreshAsset }) => {
       });
 
       await refreshAsset();
-      toast.success("Asset Return Successfully", {autoClose:2000})
+      toast.success("Asset Return Successfully", { autoClose: 2000 });
 
       closeModal();
     } catch (error) {
@@ -32,7 +32,7 @@ const ReturnAssetModal = ({ closeModal, assetId, refreshAsset }) => {
 
   return (
     <div
-      className="
+      className="-mt-6
         fixed inset-0
         bg-black/40
         flex
